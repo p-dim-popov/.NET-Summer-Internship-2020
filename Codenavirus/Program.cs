@@ -1,27 +1,14 @@
 ﻿using System;
-using System.Linq;
 
 namespace Codenavirus
 {
-    internal static class Program
+    public class Program
     {
         static void Main(string[] args)
         {
-            var world = new[]
-            {
-                new [] { '#', '#', '#'},
-                new [] { '#', '#', '#'},
-                new [] { '#', '#', '#'}
-            };
-
-            var firstInfected = new[] { 1, 1 };
-
-            Console.WriteLine($"[ {string.Join(", ", Codenavirus(world, firstInfected))} ]");
-
-            //TODO: remove additional functions
         }
 
-        static int[] Codenavirus(char[][] world, int[] firstInfected)
+        int[] Codenavirus(char[][] world, int[] firstInfected)
         {
             // Not using the new "Tuple type" because not sure of required C# version
 
@@ -33,16 +20,13 @@ namespace Codenavirus
                 people[row] = new Tuple<char, int>[world[row].Length];
                 for (int col = 0; col < world[row].Length; col++)
                 {
-                    var state = world[row][col] == '#' ? 'H' : '.';
+                    char state = world[row][col] == '#' ? 'H' : '.';
                     people[row][col] = Tuple.Create(state, 0);
                 }
             }
 
             // infect the first person
             people[firstInfected[0]][firstInfected[1]] = Tuple.Create('I', 0);
-
-            people.PrintTupleArray();
-            Console.WriteLine();
 
             int daysPassed = 1;
             int infectedPeople = 1;
@@ -58,7 +42,7 @@ namespace Codenavirus
                 {
                     for (int col = 0; col < people[row].Length; col++)
                     {
-                        var person = people[row][col];
+                        Tuple<char, int> person = people[row][col];
 
                         if (person.Item1 != 'I') continue;
 
@@ -94,22 +78,10 @@ namespace Codenavirus
                         }
                     }
                 }
-
-                people.PrintTupleArray();
-                Console.WriteLine();
-
                 daysPassed++;
             }
 
             return new int[] { daysPassed, infectedPeople, recoveredPeople, notInfectedPeople };
-        }
-
-        static void PrintTupleArray(this Tuple<char, int>[][] people)
-        {
-            people
-                .Select(pa => string.Join(", ", pa.Select(p => p.Item1)))
-                .ToList()
-                .ForEach(Console.WriteLine);
         }
     }
 }

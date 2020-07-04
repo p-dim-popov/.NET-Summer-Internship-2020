@@ -5,7 +5,7 @@ namespace MarketStore
     class SilverDiscountCard : DiscountCard, IDiscountCard
     {
         private const decimal InitialDiscountRate = 0.02m;
-        private const decimal FirstDiscountRateAddition = 0.035m;
+        private const decimal SecondStageDiscountRate = 0.035m;
 
         private const decimal FirstTurnoverCriteria = 300m;
         public SilverDiscountCard(Person cardHolder) 
@@ -22,7 +22,7 @@ namespace MarketStore
                     return InitialDiscountRate;
                 }
 
-                return FirstDiscountRateAddition;
+                return SecondStageDiscountRate;
             }
         }
     }

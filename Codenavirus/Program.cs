@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace Codenavirus
 {
@@ -11,7 +12,8 @@ namespace Codenavirus
         int[] Codenavirus(char[][] world, int[] firstInfected)
         {
             // Not using the new "Tuple type" because not sure of required C# version
-
+            
+            int notInfectedPeople = 0;
             // Projection of the world with people and their health
             // Item1 - person's health state, Item2 - infection day of the person
             var people = new Tuple<char, int>[world.Length][];
@@ -20,8 +22,13 @@ namespace Codenavirus
                 people[row] = new Tuple<char, int>[world[row].Length];
                 for (int col = 0; col < world[row].Length; col++)
                 {
-                    char state = world[row][col] == '#' ? 'H' : '.';
-                    people[row][col] = Tuple.Create(state, 0);
+                    if (world[row][col] == '#')
+                    {
+                        people[row][col] = Tuple.Create('H', 0);
+                        notInfectedPeople++;
+                        continue;
+                    }
+                    people[row][col] = Tuple.Create('.', 0);
                 }
             }
 
@@ -31,7 +38,7 @@ namespace Codenavirus
             int daysPassed = 1;
             int infectedPeople = 1;
             int recoveredPeople = 0;
-            int notInfectedPeople = world.Length * world[0].Length - infectedPeople;
+            //int notInfectedPeople = world.Length * world[0].Length - infectedPeople;
             bool isSomeoneInfectedToday = true;
 
             while (isSomeoneInfectedToday)
